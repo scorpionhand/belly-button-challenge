@@ -69,6 +69,7 @@ function buildCharts(sample) {
     let barTrace = [{
       x: sample_values.slice(0,10).reverse(),
       y: sample_otu_ids_str.slice(0,10).reverse(),
+      text: sample_otu_labels,
       type: 'bar',
       orientation: 'h'
     }];
