@@ -18,7 +18,7 @@ function buildMetadata(sample) {
     // tags for each key-value in the filtered metadata.
     Object.entries(buttonMeta[0]).forEach(([key, value]) => {
       upperKey = key.toUpperCase()
-      metaSample.append('li').text(`${upperKey}: ${value}`)
+      metaSample.append('tr').text(`${upperKey}: ${value}`)
     })
   });
 };
