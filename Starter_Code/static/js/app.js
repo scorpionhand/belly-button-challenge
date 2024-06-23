@@ -2,6 +2,10 @@
 function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
+    // Oveview of the data
+    console.log(`json data: `)
+    console.log(Object(data))
+
     // get the metadata field
     let buttonAllMeta = data.metadata;
 
@@ -16,6 +20,9 @@ function buildMetadata(sample) {
 
     // Inside a loop, you will need to use d3 to append new
     // tags for each key-value in the filtered metadata.
+    console.log(`Results for metadata ID Number ${sample} [key, value]: `)
+    console.log(Object.entries(buttonMeta[0]))
+
     Object.entries(buttonMeta[0]).forEach(([key, value]) => {
       upperKey = key.toUpperCase()
       metaSample.append('tr').text(`${upperKey}: ${value}`)
@@ -29,9 +36,11 @@ function buildCharts(sample) {
 
     // Get the samples field
     let buttonAllSamples = data.samples;
-
+    
     // Filter the samples for the object with the desired sample number
     let buttonSample = buttonAllSamples.filter(result => result.id == sample);
+    console.log(`Results for samples with ID Number ${sample}: `)
+    console.log(buttonSample[0])
 
     // Get the otu_ids, otu_labels, and sample_values
     let sample_otu_ids = buttonSample[0].otu_ids
@@ -60,6 +69,10 @@ function buildCharts(sample) {
 
     // Render the Bubble Chart
     Plotly.newPlot("bubble", [bubbleTrace], bubbleLayout)
+    console.log(`Plotly bubble chart ${sample}: `)
+    console.log(bubbleTrace)
+    console.log(bubbleLayout)
+
 
     // For the Bar Chart, map the otu_ids to a list of strings for your yticks
     let sample_otu_ids_str = sample_otu_ids.map(id => `OTU ${id} `)
@@ -69,7 +82,7 @@ function buildCharts(sample) {
     let barTrace = [{
       x: sample_values.slice(0,10).reverse(),
       y: sample_otu_ids_str.slice(0,10).reverse(),
-      text: sample_otu_labels,
+      text: sample_otu_labels.slice(0,10).reverse(),
       type: 'bar',
       orientation: 'h'
     }];
@@ -83,6 +96,9 @@ function buildCharts(sample) {
 
     // Render the Bar Chart
     Plotly.newPlot('bar', barTrace, barLayout);
+    console.log(`Plotly bar chart ${sample}: `)
+    console.log(barTrace)
+    console.log(barLayout)
 
   });
 }
@@ -115,6 +131,8 @@ function init() {
 
 // Function for event listener
 function optionChanged(newSample) {
+  // Clear the console output
+  console.clear()
   // Build charts and metadata panel each time a new sample is selected
   buildMetadata(newSample)
   buildCharts(newSample)
